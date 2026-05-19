@@ -20,7 +20,7 @@ To ensure a safe deployment environment completely separated from the host opera
   * **Workstation Endpoint:** Windows 10 Enterprise.
 * **Network Segregation:** Switched network adapters from default NAT/Bridged modes to an **Internal Network**. This creates an air-gapped, software-defined network switch where the VMs communicate exclusively with each other.
 
-*Place VirtualBox network configuration screenshot here*
+![Network Configuration](Phase_1_Network_Configuration.png)
 
 ### Phase 2: Domain Controller Configuration (Server-Side)
 Before provisioning directory services, the server was prepared to act as an authoritative root node:
@@ -31,7 +31,8 @@ Before provisioning directory services, the server was prepared to act as an aut
   * **Preferred DNS:** `192.168.56.10` (Pointed to itself to manage local domain name resolution).
 * **Directory Services Deployment:** Installed the **Active Directory Domain Services (AD DS)** role via Server Manager and successfully promoted the server to a Domain Controller, establishing a brand-new forest root.
 
-*Place Server Manager / Dashboard screenshot here*
+![Server Dashboard](Phase_2_Dashboard.png)
+![Server Manager](Phase_2_Server_Manager.png)
 
 ### Phase 3: Client Configuration & Domain Join
 The workstation node was configured to securely authenticating against the new central directory:
@@ -42,7 +43,8 @@ The workstation node was configured to securely authenticating against the new c
   * **Preferred DNS:** `192.168.56.10` (*Critical: Directs all authentication and resolution requests to the Domain Controller*).
 * **Domain Integration:** Modified system properties to migrate the client from a standard local Workgroup to the active network domain, finalizing the handshake using Domain Administrator credentials.
 
-*Place System Properties / Successful Domain Join screenshot here*
+![Windows Client IPv4](Phase_3_Windows_client_IPv4.png)
+![Successful Domain Join](Phase_3_windows_client_successful_domain_join.png)
 
 ### Phase 4: Centralized Identity & Access Management
 With the core architecture established, user administration was centralized on the Domain Controller:
@@ -51,7 +53,8 @@ With the core architecture established, user administration was centralized on t
 * **User Provisioning:** Created a standard, non-privileged employee network account within the custom OU.
 * **Validation:** Documented a successful login on the Windows 10 client machine using the newly created standard network credentials, confirming cross-machine authentication.
 
-*Place ADUC structure or Client User Login screenshot here*
+![Server ADUC Structure](Phase_4_Server_ADUC_Structure.png)
+![Client User Login](Phase_4_client_user_login.png)
 
 ### Phase 5: Group Policy Management (GPO) & Workstation Hardening
 To eliminate the manual configuration of individual computers, Group Policy Objects were deployed to automate and scale system security:
@@ -63,7 +66,8 @@ To eliminate the manual configuration of individual computers, Group Policy Obje
   * **CLI Restriction:** Enabled *Prevent access to the command prompt*.
 * **Defensive Verification:** Authenticated as the standard user on the Windows 10 client and confirmed that both the Command Prompt and Control Panel were strictly inaccessible, mitigating local privilege escalation threats.
 
-*Place GPO management window or blocked prompt error screenshot here*
+![GPO Management Window](Phase_5_GPO_management_window.png)
+![Blocked CMD Prompt](Phase_5_blocked_CMD.png)
 
 ### Phase 6: Enterprise File Sharing & Permissions
 This phase establishes structured corporate storage adhering strictly to the security principle of least privilege:
@@ -75,7 +79,8 @@ This phase establishes structured corporate storage adhering strictly to the sec
 * **Automated Drive Mapping:** Bypassed manual connection paths by utilizing the `Standard User Restrictions` GPO to deploy a User Preference Drive Map. 
 * **Outcome:** Configured the folder to instantly mount as the network **`Z:` Drive** upon workstation authentication. Verified that the mapped drive automatically appears within File Explorer on the client machine.
 
-*Place File Explorer showing the mapped Z: drive screenshot here*
+![Windows Server File Sharing](Phase_6_Windows_server_file_sharing.png)
+![Windows Client Z Drive](Phase_6_windows_client_z_drive.png)
 
 ---
 
